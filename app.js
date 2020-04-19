@@ -5,7 +5,7 @@ const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 
 // Set on bot ready
-var welcomeMessage = '';
+var welcomeMessage = welcome_message_header;
 var guild;
 
 //-----------------
@@ -29,21 +29,21 @@ function log_fatal(msg) {
     process.exit(1);
 }
 
-function welcomeMember(member) {
+async function welcomeMember(member) {
     log_info(`Welcoming ${member.tag}`);
 
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
         .setTitle('Welcome to the official DigiPen discord server!')
         .setColor(0xC41F37)
         .setDescription(welcomeMessage);
 
     // Send welcome message
-    member.send(embed).then(async(msg) => {
-        // Add emojis for reactions, can unfortunately take a while since we want them in order and need to wait
-        for (const e of role_data) {
-            await msg.react(e.emoji).catch(log_warn);
-        }
-    }).catch(log_warn);
+    const msg = await member.send(embed).catch(log_warn);
+
+    // Add emojis for reactions, can unfortunately take a while since we want them in order and need to wait
+    for (const e of role_data) {
+        await msg.react(e.emoji).catch(log_warn);
+    }
 }
 
 function findRoleByEmoji(emoji) {
@@ -74,7 +74,6 @@ client.on('ready', () => {
     }
 
     // Build welcome message
-    welcomeMessage += welcome_message_header;
     for (const e of role_data) {
         welcomeMessage += `\n${e.emoji} -> ${e.role_description}`;
     }
@@ -99,7 +98,7 @@ client.on('messageReactionAdd', (reaction, user) => {
         return;
     }
 
-    let role = findRoleByEmoji(reaction.emoji.name);
+    const role = findRoleByEmoji(reaction.emoji.name);
     if (!role) {
         log_warn(`Failed to find role by emoji: ${reaction.emoji.name}`);
         return;
@@ -116,7 +115,7 @@ client.on('messageReactionRemove', (reaction, user) => {
         return;
     }
 
-    let role = findRoleByEmoji(reaction.emoji.name);
+    const role = findRoleByEmoji(reaction.emoji.name);
     if (!role) {
         log_warn(`Failed to find role by emoji: ${reaction.emoji.name}`);
         return;

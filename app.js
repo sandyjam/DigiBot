@@ -21,6 +21,7 @@ function welcomeMember(member) {
     // Send welcome message
     member.send(embed).then((msg) => {
         // Add emojis for reactions, can unfortunately take a while since we want them in order and need to wait
+        // TODO: make this not ugly
         msg.react(role_data[0].emoji)
             .then(() => msg.react(role_data[1].emoji))
             .then(() => msg.react(role_data[2].emoji))
@@ -32,6 +33,10 @@ function welcomeMember(member) {
             .then(() => msg.react(role_data[8].emoji))
             .then(() => msg.react(role_data[9].emoji))
             .then(() => msg.react(role_data[10].emoji))
+            // pronouns
+            .then(() => msg.react(role_data[11].emoji))
+            .then(() => msg.react(role_data[12].emoji))
+            .then(() => msg.react(role_data[13].emoji))
             .catch(console.err);
     }).catch(console.err);
 }

@@ -2,7 +2,7 @@
 
 Custom discord bot for the official DigiPen discord server
 
-![example](https://i.imgur.com/msgmFDO.png)
+![example](https://i.imgur.com/aOiaVSj.png)
 
 ### Current Features
 

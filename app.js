@@ -37,8 +37,8 @@ function welcomeMember(member) {
             .then(() => msg.react(role_data[11].emoji))
             .then(() => msg.react(role_data[12].emoji))
             .then(() => msg.react(role_data[13].emoji))
-            .catch(console.err);
-    }).catch(console.err);
+            .catch(console.error);
+    }).catch(console.error);
 }
 
 function findRoleByEmoji(emoji) {
@@ -65,7 +65,7 @@ client.on('ready', () => {
     // Set guild
     guild = client.guilds.cache.get(guild_id);
     if (!guild) {
-        console.err(`[fatal] Failed to find guild: ${guild_id}`);
+        console.error(`[fatal] Failed to find guild: ${guild_id}`);
         process.exit(1);
     }
 
@@ -102,7 +102,7 @@ client.on('messageReactionAdd', (reaction, user) => {
     }
 
     // Add the role
-    guild.members.fetch(user).then(member => member.roles.add(role).catch(console.err)).catch(console.err);
+    guild.members.fetch(user).then(member => member.roles.add(role).catch(console.error)).catch(console.error);
 });
 
 // Reaction remove
@@ -119,7 +119,7 @@ client.on('messageReactionRemove', (reaction, user) => {
     }
 
     // Remove the role
-    guild.members.fetch(user).then(member => member.roles.remove(role).catch(console.err)).catch(console.err);
+    guild.members.fetch(user).then(member => member.roles.remove(role).catch(console.error)).catch(console.error);
 });
 
 //------

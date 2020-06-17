@@ -1,12 +1,13 @@
 // Constants
 const { welcome_message_header, role_data } = require('./bot_data.json');
-const { token, guild_id } = require('./config.json');
+const { prefix, token, guild_id } = require('./config.json');
 const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 
 // Set on bot ready
 var welcomeMessage = welcome_message_header;
 var guild;
+var verificationChannel;
 
 //-----------------
 // Helper functions
@@ -73,6 +74,11 @@ client.on('ready', () => {
         log_fatal(`Failed to find guild: ${guild_id}`);
     }
 
+    verificationChannel = guild.channels.cache.find(ch => ch.name === 'outreach-verification');
+    if (!verificationChannel) {
+	log_fatal('Failed to find verification channel');
+    }
+
     // Build welcome message
     for (const e of role_data) {
         welcomeMessage += `\n${e.emoji} -> ${e.role_description}`;
@@ -82,18 +88,17 @@ client.on('ready', () => {
 // New member
 client.on('guildMemberAdd', member => {
     welcomeMember(member.user);
+    verificationChannel.send(`<@${member.id}> has joined and needs to be verified`);
 });
 
-// On message (for debug)
+// On message
 client.on('message', message => {
-    if (message.content === '!welcomeme') {
-        welcomeMember(message.author);
-    }
+    // empty
 });
 
 // Reaction add
 client.on('messageReactionAdd', (reaction, user) => {
-    // Return if the reacting user is the bot, the message is from a guild, the author of the message is not the bot
+    // Return if the reacting user is the bot, or the message is from a guild, or the author of the message is not the bot
     if (user.id === client.user.id || reaction.message.guild || reaction.message.author.id !== client.user.id) {
         return;
     }
